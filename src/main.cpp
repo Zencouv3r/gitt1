@@ -1,6 +1,7 @@
 #include "../headers/repoClass.hpp"
+#include "../headers/utility.hpp"
 
-#define PATH ".gitt"
+#define PATH ".gitt/"
 
 int main(int argc, char *argv[]) {
   if (argc == 1) {
@@ -15,8 +16,8 @@ int main(int argc, char *argv[]) {
     repo.initRepo();
   else if (command == "log")
     repo.log();
-  // else if (command == "status")
-  //   status();
+  else if (command == "status")
+    repo.status();
   // else if (command == "add")
   //   add();
   else
