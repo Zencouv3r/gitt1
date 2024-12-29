@@ -1,7 +1,8 @@
-#include "../headers/repoClass.hpp"
-#include "../headers/utility.hpp"
+#include "../include/repoClass.hpp"
+#include "../include/utility.hpp"
+#include <filesystem>
 
-#define PATH ".gitt/"
+#define FOLDERNAME ".gitt/"
 
 int main(int argc, char *argv[]) {
   if (argc == 1) {
@@ -9,7 +10,7 @@ int main(int argc, char *argv[]) {
     return 0;
   }
 
-  Repository repo(PATH);
+  Repository repo(std::filesystem::current_path().filename());
 
   std::string command = argv[1];
   if (command == "init")

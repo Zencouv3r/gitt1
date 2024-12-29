@@ -6,6 +6,7 @@
 class Repository {
 private:
   std::string path;
+  std::string trackedDirPath;
 
 public:
   Repository(std::string path);
