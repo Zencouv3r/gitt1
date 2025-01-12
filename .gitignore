@@ -1,4 +1,7 @@
+bin/
 obj/
 .gitt/
 .gitt
 compile_flags.txt
+gitt
+.DS_Store

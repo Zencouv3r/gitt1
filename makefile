@@ -1,7 +1,7 @@
 # Compiler and flags
 CXX = clang++               # Use clang++ as the compiler
-CXXFLAGS = -std=c++17 -Wall -Wextra -O2  # Compilation flags
-LDFLAGS =                    # Linking flags (if any)
+CXXFLAGS = -std=c++17 -Wall -Wextra  # Compilation flags
+LDFLAGS =  -lssl -lcrypto                 # Linking flags (if any)
 
 # Directories
 SRC_DIR = src
@@ -13,7 +13,7 @@ SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp)
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
 # Name of the final executable
-EXEC = gitt
+EXEC = bin/gitt
 
 # Default target: build the executable
 all: $(EXEC)

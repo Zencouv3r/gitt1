@@ -1,7 +1,9 @@
-#include "../include/repoClass.hpp"
+#include "../include/repo.hpp"
 #include "../include/utility.hpp"
 #include <exception>
 #include <filesystem>
+#include <fstream>
+#include <iostream>
 
 #define FOLDERNAME ".gitt"
 
@@ -24,13 +26,13 @@ void Repository::initRepo() {
       std::filesystem::create_directory(std::string(FOLDERNAME) + "/refs");
       std::ofstream head(std::string(FOLDERNAME) + "/HEAD");
       head << "ref: refs/heads/main\n";
-      std::ofstream trackedFiles(std::string(FOLDERNAME) + "/TRACKED");
+      std::ofstream index(std::string(FOLDERNAME) + "/INDEX");
       std::ofstream logFile(std::string(FOLDERNAME) + "/LOG");
 
       logFile << "------Repository created------" << std::endl
               << "Date:   " << getCurrentTime() << std::endl;
 
-      trackedFiles.close();
+      index.close();
       logFile.close();
 
       std::cout << "Repository created successfully" << std::endl;
@@ -68,15 +70,35 @@ void Repository::status() {
       return;
     }
 
+    Files indexedFiles;
+    Files actualFiles;
+
     std::filesystem::recursive_directory_iterator dirIterator(
         std::filesystem::absolute(path).parent_path());
     std::filesystem::recursive_directory_iterator endIterator;
 
-    // Iterate through each file/directory in the repo
+    // Iterate through each file in the repo
     for (; dirIterator != endIterator; ++dirIterator) {
-      std::cout << dirIterator->path() << std::endl;
+      if (std::filesystem::is_regular_file(dirIterator->path())) {
+        std::string pathStr =
+            std::filesystem::relative(dirIterator->path()).string();
+        if (pathStr.find('.'))
+          actualFiles.add(File(std::filesystem::relative(dirIterator->path())));
+      }
     }
+    indexedFiles.deserialize(std::string(FOLDERNAME) + "/INDEX");
+
+    for (auto &actualFile : actualFiles) {
+      if (!indexedFiles.isContain(actualFile))
+        std::cout << "Detected not indexed files: " << actualFile.getPath()
+                  << "\n";
+    }
+
   } catch (const std::filesystem::filesystem_error &e) {
     std::cout << "Error: " << e.what() << std::endl;
   }
+}
+
+void Repository::add(Files filesToStage) {
+  filesToStage.serialize(std::string(FOLDERNAME) + "/INDEX");
 }

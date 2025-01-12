@@ -1,12 +1,9 @@
-#include <filesystem>
-#include <fstream>
-#include <iostream>
+#include "../include/files.hpp"
 #include <string>
 
 class Repository {
 private:
   std::string path;
-  std::string trackedDirPath;
 
 public:
   Repository(std::string path);
@@ -14,4 +11,5 @@ public:
   void initRepo();
   void log();
   void status();
+  void add(Files filesToStage);
 };
